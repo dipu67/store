@@ -89,8 +89,25 @@ app.get('/product/:productName', async (req, res) => {
     }
 
 })
-app.get('/checkout', (req, res) => {
-    res.render('checkout')
+app.get('/checkout', async (req, res) => {
+    const {bill_full_name,bill_address,bill_phone,bill_area,total_price,products,total_quantity} = req.body
+try {
+    const order = await orderModel.create({
+        productNames:products,
+        quantity:total_quantity,
+        totalPrice:total_price,
+        fullName:bill_full_name,
+        address:bill_address,
+        phone:bill_phone,
+        area:bill_area,
+       
+    })
+    res.redirect('/')
+} catch (error) {
+    console.log(error);
+    
+}
+   
 })
 app.post('/order', (req, res) => {
     console.log(req.body);
